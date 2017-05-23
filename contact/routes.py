@@ -1,7 +1,7 @@
 # from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask import *
 from functools import wraps
-import sqlite3
+import sqlite3 as sql
 
 DATABASE = 'account.db'
 
@@ -13,7 +13,7 @@ app.config.from_object(__name__)
 app.secret_key = 'final exam'
 
 def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
+    return sql.connect(app.config['DATABASE'])
 
 @app.route('/')
 def home():
@@ -33,7 +33,29 @@ def login_required(test):
             return redirect(url_for('login'))
     return wrap
 
+def insert_contact(name, number):
+    con = sql.connect(DATABASE)
+    cur = con.cursor()
+    cur.execute("INSERT INTO tb_contact (name, number) VALUES (?,?)", (name, number))
+    con.commit()
+    con.close()
 
+def select_contact(params=()):
+    con = sql.connect(DATABASE)
+    cur = con.cursor()
+    if params==():
+        cur.execute("select * from tb_contact")
+        return cur.fetchall()
+    else:
+        string = "select"
+        for i in xrange(len(params)-1):
+            string += "%s,"
+        string += "%s"
+        string += " from tb_contact"
+
+        result = cur.execute(string)
+        con.close()
+        return result.fetchall()
 
 @app.route('/hello')
 @login_required
@@ -63,9 +85,7 @@ def login():
 
 @app.route('/contact', methods=['POST', 'GET'])
 def contact():
-    g.db = connect_db()
-    cur = g.db.execute('select id, name, number from tb_contact')
-    contact = [dict(id=row[0], name=row[1], number=row[2]) for row in cur.fetchall()]
+    contact = [dict(id=row[0], name=row[1], number=row[2]) for row in select_contact()]
 
     error = None
     if request.method == 'POST':
@@ -74,11 +94,9 @@ def contact():
         if name == '' or number == '':
             error = 'Invalid! Please input name and number'
         else:
-            g.db.execute('insert into tb_contact(id, name, number) values (NULL,?,?)',(name, number))
-            g.db.commit()
+            insert_contact(name, number)
             return redirect(url_for('contact'))
     
-    g.db.close()
     return render_template('contact.html', error=error, contact=contact)
 
 
