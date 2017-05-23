@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Phonebook</title>
+</head>
+<body>
+	<h1>Phonebook</h1>
+
+	{% if message %}
+
+		<h3>{{message}}</h3>
+
+	{% endif %}
+
+	{% if phoneList %}
+
+		<form action="/phonebook" method="POST" enctype="multipart/form-data">
+			<label>Name:</label> <input type="text" name="name">
+			<label>Phone:</label> <input type="text" name="phone">
+			<br />
+			<button type="submit">Save</button>
+		</form>
+		
+		{% for phoneNum in phoneList %}
+			<label><b>Name:</b> {{phoneNum.name}}</label>
+			<label><b>Phone:</b> {{phoneNum.phone}}</label>
+			<a href="{{'/phonebook/' ~ phoneNum.id}}"><button>Edit</button></a>
+			<br /><br />
+		{% endfor %}
+
+		<br />
+
+	{% else %}
+
+		<form action="/phonebook" method="POST" enctype="multipart/form-data">
+			<label>Name:</label> <input type="text" name="name">
+			<label>Phone:</label> <input type="text" name="phone">
+			<br />
+			<button type="submit">Save</button>
+		</form>
+
+	{% endif %}
+
+</body>
+</html>

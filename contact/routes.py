@@ -38,7 +38,7 @@ def insert_contact(name, number):
     cur = con.cursor()
     cur.execute("INSERT INTO tb_contact (name, number) VALUES (?,?)", (name, number))
     con.commit()
-    con.close()
+    #con.close()
 
 def select_contact(params=()):
     con = sql.connect(DATABASE)
@@ -54,8 +54,17 @@ def select_contact(params=()):
         string += " from tb_contact"
 
         result = cur.execute(string)
-        con.close()
+        #con.close()
         return result.fetchall()
+
+def select_contact_by_id(id):
+    con = sql.connect(DATABASE)
+    cur = con.cursor()
+    cur.execute("select * from tb_contact where "+id+"=?", (id,))
+    con.commit()
+    #con.close()
+    return cur.fetchall()
+
 
 @app.route('/hello')
 @login_required
@@ -64,7 +73,7 @@ def hello():
     cur = g.db.execute('select name, number from tb_contact')
     contact = [dict(name=row[0], number=row[1]) for row in cur.fetchall()]
     g.db.close()
-    return render_template('hello.html', contact=contact)
+    return render_template('hello.html', contact=contact, contact_by_id=contact_by_id)
 
 @app.route('/logout')
 def logout():
@@ -98,6 +107,25 @@ def contact():
             return redirect(url_for('contact'))
     
     return render_template('contact.html', error=error, contact=contact)
+
+@app.route('/update/<contact_id>', methods=['POST', 'GET'])
+def update(contact_id):
+    contact = [dict(id=row[0], name=row[1], number=row[2]) for row in select_contact()]
+    #contact_by_id = [dict(id=row[0], name=row[1], number=row[2]) for row in select_contact_by_id(contact_id)]
+    contact_by_id = select_contact_by_id(contact_id)
+
+    error = None
+    if request.method == 'POST':
+        name = request.form['name']
+        number = request.form['number']
+        if name == '' or number == '':
+            error = 'Invalid! Please input name and number'
+        else:
+            #insert_contact(name, number)
+            return redirect(url_for('contact'))
+    
+    return render_template('update.html', error=error, contact=contact, contact_by_id=contact_by_id)
+
 
 
 if __name__ == '__main__':

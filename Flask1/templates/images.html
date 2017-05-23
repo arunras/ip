@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Images</title>
+</head>
+<body>
+	<h1>Images</h1>
+
+	{% if images %}
+		
+		{% for image in images %}
+		<img src="{{'/static/randImages/' ~ image ~ '.png'}}">
+		{% endfor %}
+
+		<br />
+		<form action="/images" method="POST" enctype="multipart/form-data">
+			<button type="submit">New Random Images</button>
+		</form>	
+
+	{% else %}
+
+		<form action="/images" method="POST" enctype="multipart/form-data">
+			<button type="submit">Show Random Images</button>
+		</form>
+
+	{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit Phonebook</title>
+</head>
+<body>
+	<h1>Edit Phonebook</h1>
+
+	{% if entry %}
+
+		<form action="{{'/phonebook/' ~ entry.id}}" method="POST" enctype="multipart/form-data">
+			<label>Name:</label> <input type="text" name="name" value="{{entry.name}}">
+			<label>Phone:</label> <input type="text" name="phone" value="{{entry.phone}}">
+			<br />
+			<button type="submit">Save</button>
+		</form>
+
+		<form action="{{'/deletePhonebook/' ~ entry.id}}" method="POST" enctype="multipart/form-data">
+			<button type="submit">Delete!</button>
+		</form>
+
+	{% else %}
+
+	<h1>Entry not found</h1>
+
+	{% endif %}
+
+</body>
+</html>
