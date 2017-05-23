@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Python Flask</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon">
+</head>
+
+
+<header>
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+            <img style="max-width:120px; margin-top: -7px;" src="{{ url_for('static', filename='images/mainlogo.png') }}"> 
+        </a>
+    </div>
+    <ul class="nav nav-pills" role="tablist">
+        <li role="presentation" class="active"><a href="#">Home <span class="badge">42</span></a></li>
+        <li role="presentation"><a href="#">Profile</a></li>
+        <li role="presentation"><a href="#">Messages <span class="badge">3</span></a></li>
+    </ul>
+</header>
+
+</html>
+
+
