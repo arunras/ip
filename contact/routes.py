@@ -64,8 +64,8 @@ def login():
 @app.route('/contact', methods=['POST', 'GET'])
 def contact():
     g.db = connect_db()
-    cur = g.db.execute('select name, number from tb_contact')
-    contact = [dict(name=row[0], number=row[1]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, name, number from tb_contact')
+    contact = [dict(id=row[0], name=row[1], number=row[2]) for row in cur.fetchall()]
 
     error = None
     if request.method == 'POST':
@@ -74,7 +74,7 @@ def contact():
         if name == '' or number == '':
             error = 'Invalid! Please input name and number'
         else:
-            g.db.execute('insert into tb_contact(id, name, number) values (?,?,?)',(2, name, number))
+            g.db.execute('insert into tb_contact(id, name, number) values (NULL,?,?)',(name, number))
             g.db.commit()
             return redirect(url_for('contact'))
     

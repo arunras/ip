@@ -22,12 +22,16 @@
     <div class="list-container">
         <table>
             <tr>
+                <th width="50">ID</th>
                 <th width="200">Name</th>
                 <th width="200">Number</th>
-                <th width="100"></th>
+                <th widttt"50"></th>
             </tr>
             {% for contact in contact %}
             <tr>
+                <td>
+                    {{ contact.id }}
+                </td>
                 <td>
                     {{ contact.name }}
                 </td>
