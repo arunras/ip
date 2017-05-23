@@ -8,12 +8,14 @@
     {% endif %}
     <form action="" method="POST">
         <dl>
+            {% for contact in contact_by_id %}
             <dt>Name:</dt> 
-            <dd><input type='text' name='name' value='{{ request.form.name }}'></dd>
+            <dd><input type='text' name='name' value='{{ contact.name }}'></dd>
             <dt>Number:</dt> 
-            <dd><input type='text' name='number' value='{{ request.form.number }}'>
+            <dd><input type='text' name='number' value='{{ contact.number }}'>
                 <input type="submit" value="Update" class="btn btn-primary">
             </dd>
+            {% endfor %}
         </dl> 
     </form>
     </div>
@@ -25,7 +27,6 @@
                 <th width="50">ID</th>
                 <th width="200">Name</th>
                 <th width="200">Number</th>
-                <th widttt"50"></th>
             </tr>
             {% for contact in contact_by_id %}
             <tr>
@@ -37,10 +38,6 @@
                 </td>
                 <td> 
                     {{ contact.number }}
-                </td>
-                <td>
-
-                    <a href="/update/{{contact.id}}" class="btn btn-info">Edit</button>
                 </td>
             </tr>
             {% endfor %}

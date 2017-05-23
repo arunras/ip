@@ -57,13 +57,29 @@ def select_contact(params=()):
         #con.close()
         return result.fetchall()
 
-def select_contact_by_id(id):
+def select_contact_by_id(contact_id):
     con = sql.connect(DATABASE)
     cur = con.cursor()
-    cur.execute("select * from tb_contact where "+id+"=?", (id,))
+    cur.execute("select * from tb_contact where id = ?", (contact_id,))
+    #con.close()
+    return cur.fetchall()
+
+def update_contact(contact_id, name, number):
+    con = sql.connect(DATABASE)
+    cur = con.cursor()
+    cur.execute("UPDATE tb_contact SET name=?, number=? WHERE id=?", (name, number, contact_id))        
     con.commit()
     #con.close()
     return cur.fetchall()
+
+def delete_contact(contact_id):
+    con = sql.connect(DATABASE)
+    cur = con.cursor()
+    cur.execute("DELETE FROM tb_contact WHERE id=?", (contact_id,))        
+    con.commit()
+    #con.close()
+
+
 
 
 @app.route('/hello')
@@ -111,8 +127,7 @@ def contact():
 @app.route('/update/<contact_id>', methods=['POST', 'GET'])
 def update(contact_id):
     contact = [dict(id=row[0], name=row[1], number=row[2]) for row in select_contact()]
-    #contact_by_id = [dict(id=row[0], name=row[1], number=row[2]) for row in select_contact_by_id(contact_id)]
-    contact_by_id = select_contact_by_id(contact_id)
+    contact_by_id = [dict(id=row[0], name=row[1], number=row[2]) for row in select_contact_by_id(contact_id)]
 
     error = None
     if request.method == 'POST':
@@ -121,10 +136,20 @@ def update(contact_id):
         if name == '' or number == '':
             error = 'Invalid! Please input name and number'
         else:
-            #insert_contact(name, number)
+            update_contact(contact_id, name, number)
             return redirect(url_for('contact'))
     
     return render_template('update.html', error=error, contact=contact, contact_by_id=contact_by_id)
+
+@app.route('/delete/<contact_id>', methods=['POST', 'GET'])
+def delete(contact_id):
+    if request.method == 'POST':
+        delete_contact(contact_id)
+
+    return redirect(url_for('contact'))
+    
+    #return render_template('contact.html')
+
 
 
 
