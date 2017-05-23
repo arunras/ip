@@ -1,11 +1,27 @@
 # from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask import *
+from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
 import sqlite3 as sql
 
 DATABASE = 'account.db'
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///account.db'
+db = SQLAlchemy(app)
+
+class Contact(db.Model):
+    __tablename__ = 'tb_contact'
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('name', db.String(80))
+    number = db.Column('number', db.String(80))
+
+    def __init__(self, id, name, number):
+        self.id = id
+        self.name = name
+        self.number = number
+
+
 
 app.config.from_object(__name__)
 
