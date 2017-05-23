@@ -4,5 +4,14 @@
     <br />
     <br />
     <a href="/logout">Logout</a>
+    <br />
+    <br />
+    <h3>List:</h3>
+    {% for item in contact %}
+        {{ item.name }}: {{ item.number }}
+    {% endfor %}
+
+
+
 {% endblock %}
 

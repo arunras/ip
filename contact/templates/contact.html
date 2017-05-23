@@ -1,0 +1,45 @@
+{% extends "template.html" %}
+{% block content %}
+    
+    <div class="contact-container">
+    <h1>Add New Phone</h1>
+    {% if error %}
+        <p class='error'><strong>Error: </strong>{{ error }}</p>
+    {% endif %}
+    <form action="" method="POST">
+        <dl>
+            <dt>Name:</dt> 
+            <dd><input type='text' name='name' value='{{ request.form.name }}'></dd>
+            <dt>Number:</dt> 
+            <dd><input type='text' name='number' value='{{ request.form.number }}'>
+                <input type="submit" value="Add" class="btn btn-primary">
+            </dd>
+        </dl> 
+    </form>
+    </div>
+
+
+    <div class="list-container">
+        <table>
+            <tr>
+                <th width="200">Name</th>
+                <th width="200">Number</th>
+                <th width="100"></th>
+            </tr>
+            {% for contact in contact %}
+            <tr>
+                <td>
+                    {{ contact.name }}
+                </td>
+                <td> 
+                    {{ contact.number }}
+                </td>
+                <td>
+                     <button type="button" class="btn btn-info">Edit</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+
